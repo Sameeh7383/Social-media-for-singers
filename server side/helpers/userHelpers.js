@@ -15,12 +15,12 @@ module.exports = {
       console.log(data);
       db.get()
         .collection("user")
-        .findOne({ $or: [{ email: data.email }, { phoneNumber: data.phone }] })
+        .findOne({$or:[{Email: data.Email},{PhoneNumber: data.PhoneNumber}]})
         .then(async (UserData) => {
           if (UserData) {
             resolve("exist");
           } else {
-            data.password = await bcrypt.hash(data.password, 10);
+            data.Password = await bcrypt.hash(data.Password, 10);
             db.get()
               .collection("user")
               .insertOne(data)
@@ -34,9 +34,9 @@ module.exports = {
   },
   verifyUser:(data)=>{
     return new Promise( (resolve, reject) => {
-      db.get().collection("user").findOne({email:data.email}).then((user)=>{
+      db.get().collection("user").findOne({Email:data.Email}).then((user)=>{
         if(user){
-          bcrypt.compare(data.password,user.password).then((result) =>{
+          bcrypt.compare(data.Password,user.Password).then((result) =>{
             if(result){
               resolve(user)
             }
