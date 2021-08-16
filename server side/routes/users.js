@@ -6,8 +6,8 @@ const {JWT_TOKEN}= require("../config/KEYS")
 jwtVerify=require("../Middlewares/tokenVerify")
 var cors = require('cors')
 /* GET users listing. */
-router.get('/',jwtVerify,function(req, res, next) {
-  res.send('Hello man lets start a new revolution');
+router.get('/',function(req, res, next) {
+  res.render('test');
 });
 
 router.post('/signUp',(req,res)=>{
@@ -46,5 +46,26 @@ router.post('/login',(req,res)=>{
     }
   }).catch(err=> {console.log(err)})
 })
-
+router.get('/UserProfile/:id',(req,res)=>{
+userHelpers.findUser(req.params.id).then((user)=>{
+  console.log(user)
+  res.status(200).json(user)
+})
+})
+router.put('/followUser/:id',(req,res)=>{
+userHelpers.followUser(req.params,req.body).then((data)=>{
+ res.status(200).json(data)
+})
+})
+router.post('/updateProfile/:id',(req,res)=>{
+  userHelpers.editProfile(req.params.id,req.body).then((data)=>{
+   res.status(200).json(data)
+  })
+  })
+  router.get('/SearchProfile/:searchKey',(req,res)=>{
+    userHelpers.searchProfile(req.params.searchKey).then((data)=>{
+      console.log(data)
+      res.status(200).json(data)
+    })
+    })
 module.exports = router;

@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var fileUpload=require('express-fileupload')
+// var fileUpload=require('express-fileupload')
 var db= require('./config/connection')
 var session= require('express-session')
 const { MongoBulkWriteError } = require('mongodb')
@@ -21,14 +21,15 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret:"its a secret",cookie:{maxAge:60000000}}))
-app.use(fileUpload())
 
 db.connect((err)=>{
   if(err) console.log("connection error:"+err)
@@ -44,9 +45,8 @@ db.connect((err)=>{
 //     console.log("error in connection with mongodb",err);
 // })
 
-
-app.use('/', usersRouter);
-app.use('/post', postRouter);
+app.use('/api/v1/', usersRouter);
+app.use('/api/v1/post', postRouter);
 // app.use('/admin',adminRouter)
 
 
